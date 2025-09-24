@@ -16,9 +16,22 @@ async function bootstrap() {
     .setDescription('The WrapperX API description')
     .setVersion('1.0')
     .addTag('wrapperX')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Enter your JWT token (without Bearer prefix)',
+      },
+      'access-token',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
